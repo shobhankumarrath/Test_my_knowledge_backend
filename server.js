@@ -2,11 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
-
+const helmet = require("helmet");
 const emailRoutes = require("./src/routes/emailRoutes");
 const { ALLOWED_ORIGINS } = require("./src/utils/constants");
 
 const app = express();
+
+app.use(helmet());
 // Cors Security
 app.use(
   cors({
@@ -17,6 +19,9 @@ app.use(
         callback(new Error("Not Allowed by CORS"));
       }
     },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "x-api-key"],
+    credentials: false,
   })
 );
 
